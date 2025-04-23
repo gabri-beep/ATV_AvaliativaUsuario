@@ -56,7 +56,7 @@ public class UsuarioController {
     }
 
     //atualizar senha do usuario
-    @PutMapping("/atualizarSenha/{id}")
+    @PutMapping("/{id}/senha")
     public ResponseEntity<UsuarioDto> updateSenha(@PathVariable Long id, @RequestBody UsuarioDto usuarioDto){
         Optional<UsuarioDto> usuarioDtoOptional = usuarioService.updateSenhaUsuario(id, usuarioDto);
         if (usuarioDtoOptional.isPresent()){

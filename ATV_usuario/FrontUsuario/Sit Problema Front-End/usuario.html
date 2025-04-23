@@ -36,6 +36,8 @@
     <form id="usuarioBusca">
         <label>Nome do Usuario:</label>
         <input type="text" name="nomeBusca" id="nomeBusca"><br><br>
+        <label>Cpf do Usuario:</label>
+        <input type="text" name="cpfBusca" id="cpfBusca"><br><br>
         <button type="submit">Carregar Usuarios</button>
     </form>
 
@@ -80,7 +82,8 @@
                 let data = await response.json()
     
                 alert("Sucesso: " + JSON.stringify(data));
-                getUsuarios();
+                getUsuariosNome();
+                getUsuariosCpf();
             } catch (error) {
                 alert("Erro na requisição: " + error.message)
                 
@@ -119,11 +122,12 @@
             });
         }
         
-        async function getUsuarios(event) {
+        async function getUsuariosNome(event) {
             event.preventDefault();
 
-            let nomeBusca = document.getElementById("nomeBusca").value; // acrecentando filtro de nome a busca, caso necessário
-
+            let nomeBusca = document.getElementById('nomeBusca').value
+            
+             // acrecentando filtro de nome a busca, caso necessário
             try {
                 let response = await fetch(`http://localhost:8080/usuario?nome=${nomeBusca}`, {
                 method: "GET",
@@ -140,6 +144,29 @@
             } catch (error) {
                 alert("Erro na requisição: " + error.message)
             }
+        }
+
+        async function getUsuariosCpf(event2) {
+            event2.preventDefault();
+
+            let cpfBusca = document.getElementById('cpfBusca');
+
+            try {
+                let response = await fetch(`http://localhost:8080/usuario?cpf=${cpfBusca}`, {
+                    method: "GET",
+                    headers: { "Content-Type": "application/json" },
+                });
+
+                if (!response.ok){
+                    alert("Erro do back-end" + response.status)
+                    return
+                }
+
+                let data2 = await response.json()
+                criarListaDeUsuarios(data2)
+            } catch (error) {
+                alert("Erro na requisição:" + error.message)
+            }  
         }
 
         // ## Funções para deletar Usuário(DELETE)
@@ -164,7 +191,8 @@
 
         document.addEventListener("DOMContentLoaded", () => {
             document.getElementById("usuarioForm").addEventListener("submit", postUsuario);
-            document.getElementById("usuarioBusca").addEventListener("submit", getUsuarios);
+            document.getElementById("usuarioBusca").addEventListener("submit", getUsuariosNome);
+            document.getElementById("usuarioBusca").addEventListener('submit', getUsuariosCpf);
         });
     </script>
 </body>

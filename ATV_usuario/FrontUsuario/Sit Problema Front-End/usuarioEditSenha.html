@@ -63,6 +63,11 @@
         function criarObjetoJson(){
             
             // ESTRUTURE O OBJETO NO FORMATO JSON
+            let formData = {
+                nome : document.getElementById('nome').value,
+                username : document.getElementById('username').value,
+                senha : document.getElementById('senha').value
+            }
 
             return formData
         }

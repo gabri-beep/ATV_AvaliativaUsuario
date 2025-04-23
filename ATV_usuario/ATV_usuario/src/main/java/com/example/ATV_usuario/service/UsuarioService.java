@@ -29,6 +29,18 @@ public class UsuarioService {
             return Optional.empty();
         }
     }
+
+    //buscar usuario pelo nome
+    public List<Usuario> getByNome(String nome){
+        return usuarioRepository.findAllByNome(nome);
+    }
+
+
+    //buscar usuario pelo cpf
+    public List<Usuario> getByCpf(String cpf){
+        return usuarioRepository.findAllByCpf(cpf);
+    }
+
     //cadastro do usuario
     public UsuarioDto createUsuario(UsuarioDto usuarioDto){
         Usuario usuario = usuarioDto.toUsuario();
@@ -37,12 +49,44 @@ public class UsuarioService {
     }
 
     //atualizar dados do usuario, menos username e senha
-//    public Optional<UsuarioDto> updateUsuario(Long id, UsuarioDto usuarioDto){
-//        Optional<Usuario> usuarioOptional = usuarioRepository.findById(id);
-//        if (usuarioOptional.isPresent()){
-//            Usuario usuario = usuarioOptional.get();
-//            usuario.set
-//        }
-//    }
+    public Optional<UsuarioDto> updateUsuario(Long id, UsuarioDto usuarioDto){
+        Optional<Usuario> usuarioOptional = usuarioRepository.findById(id);
+        if (usuarioOptional.isPresent()){
+            Usuario usuario = usuarioOptional.get();
+            usuario.setNome(usuarioDto.getNome());
+            usuario.setSobrenome(usuarioDto.getSobrenome());
+            usuario.setCpf(usuarioDto.getCpf());
+            usuario.setEmail(usuarioDto.getEmail());
+            usuario.setDataDeNascimento(usuarioDto.getDataDeNascimento());
+
+            usuario = usuarioRepository.save(usuario);
+            return Optional.of(usuarioDto.fromUsuario(usuario));
+        } else {
+            return Optional.empty();
+        }
+    }
+
+    //deletar um usuario
+    public boolean deleteUsuario(Long id){
+        if (usuarioRepository.existsById(id)){
+            usuarioRepository.deleteById(id);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    //atualizar senha do usuario
+    public Optional<UsuarioDto> updateSenhaUsuario(Long id, UsuarioDto usuarioDto){
+        Optional<Usuario> usuarioOptional = usuarioRepository.findById(id);
+        if (usuarioOptional.isPresent()){
+            Usuario usuario = usuarioOptional.get();
+            usuario.setSenha(usuarioDto.getSenha());
+            usuario = usuarioRepository.save(usuario);
+            return Optional.of(usuarioDto.fromUsuario(usuario));
+        } else {
+            return Optional.empty();
+        }
+    }
 
 }
